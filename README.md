@@ -29,17 +29,17 @@
 | text   	| Y    	| string 	| 需要纠错的文本，必填，字符串类型  	|
 
 #### 返回参数
-| 参数名		            | 说明  	               | 举例 				                        |
-| ----------------------|:--------------------:|-------------------------------------------:|
-| data   	            | 错误信息              | 该值为json格式数组                           |
-| word   	            | 出错词汇              | neve 	                                    |
-| type   	            | 警告类型              | spelling /grammar                          |
-| substitute   	        | 替换词                | have            	                        |
-| description           | 警告说明              | Consider changing the verb form            |
-| existence             | 词汇是否存在           | true (布尔值)                               |
-| explanation           | 错误解释    	       | Modal verbs are auxiliary verbs used...    |
-| example             	| 警告正确示例           | 该值为json格式三维数组       	                |
-| example.0.incorrect   | 示例第一条的错误举例    | Petar can sings in...                     	|
+| 参数名		            | 说明  	               | 举例 				                                               |
+| ----------------------|:--------------------:|------------------------------------------------------------------:|
+| data   	            | 错误信息              | 该值为json格式数组                                                  |
+| word   	            | 出错词汇              | he     	                                                           |
+| type   	            | 警告类型              | spelling /grammar                                                 |
+| substitute   	        | 替换词                | him            	                                               |
+| description           | 警告说明              | objective male pronoun, used to refer to a male human or animal   |
+| existence             | 词汇是否存在           | true (布尔值)                                                      |
+| explanation           | 错误解释    	       | that male; objective male pronoun                                 |
+| example             	| 警告正确示例           | 该值为json格式三维数组       	                                       |
+| example.0.incorrect   | 示例第一条的错误举例    | She likes he.                                                     |
 | example.0.correct     | 示例第一条的正确举例    | 该值为一维数组                           	|
 
 #### 返回例子
