@@ -5,7 +5,7 @@ import urllib.request
 from urllib.error import HTTPError
 from urllib.error import URLError
 
-app = Flask(__name__)
+application = app = Flask(__name__)
 
 
 def get_ginger_url(text):
@@ -88,17 +88,27 @@ def convert_to_new_json_format(data, original_text):
     return json_data
 
 
+def validate_request(req_json):
+    try:
+        original_text = req_json['text']
+    except (TypeError, KeyError):
+        return json.dumps({"error": "Please send the parameter 'text' with your request."}), None
+    if len(original_text) > 600:
+        return json.dumps({"error": "You can't check more than 600 characters at a time."}), None
+    if len(original_text) == 0:
+        return json.dumps({"error": "Input text too short."}), None
+    return None, original_text
+
+
 @app.route("/api/v1/textCheck", methods = ['POST'])
 def check_grammar():
     req_json = request.get_json()
-    original_text = req_json['text']
-    if len(original_text) > 600:
-        print("You can't check more than 600 characters at a time.")
-        return Response(json.dumps({"error": "You can't check more than 600 characters at a time."}),
+    validation_result, original_text = validate_request(req_json)
+    if validation_result:
+        return Response(validation_result,
                         status=200, mimetype='application/json')
     results, error = get_ginger_result(original_text)
     if error:
-        print("Error")
         return Response(json.dumps({"error": error}), status=200, mimetype='application/json')
     new_result = convert_to_new_json_format(results, original_text)
     res = json.dumps(new_result)

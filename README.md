@@ -12,13 +12,15 @@
 * 下载dependencies：`pip install -r requirements.txt`
 
 #### 运行说明
-* `cd web`
-* `export FLASK_APP=app.py`
+* `export FLASK_APP=application.py`
 * `flask run`
 * 目前 端口设置 为3000
 
-#### URL
+#### DEVELOPMENT URL
 * http://127.0.0.1:5000/api/v1/textCheck
+
+#### LIVE URL
+* http://grammarcorrection-env.3sumitfnka.us-east-2.elasticbeanstalk.com/api/v1/textCheck
 
 #### HTTP请求方式
 * POST
