@@ -3,4 +3,6 @@ Flask==1.0.2
 itsdangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.1
+singledispatch==3.4.0.3
+six==1.12.0
 Werkzeug==0.14.1
