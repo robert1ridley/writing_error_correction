@@ -19,9 +19,6 @@
 #### DEVELOPMENT URL
 * http://127.0.0.1:5000/api/v1/textCheck
 
-#### LIVE URL
-* http://grammarcorrection-env.3sumitfnka.us-east-2.elasticbeanstalk.com/api/v1/textCheck
-
 #### HTTP请求方式
 * POST
 
