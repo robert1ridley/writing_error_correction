@@ -52,12 +52,16 @@
 返回：
 ```
 {
-    "errno": 0,
     "data": [
         {
-            "type": "grammar",
+            "word": "he",
             "substitute": "him",
+            "from": 10,
+            "description": "objective male pronoun, used to refer to a male human or animal",
+            "type": "grammar",
+            "to": 11,
             "explanation": "that male; objective male pronoun",
+            "existence": true,
             "example": [
                 {
                     "correct": [
@@ -65,16 +69,12 @@
                     ],
                     "incorrect": "She likes he."
                 }
-            ],
-            "description": "objective male pronoun, used to refer to a male human or animal",
-            "word": "he",
-            "existence": true
+            ]
         }
     ],
+    "errno": 0,
     "message": "success"
 }
 ```
-
-
 
 
