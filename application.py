@@ -14,8 +14,9 @@ class ResponseData(object):
     self.json_data = {
       "errno": 0,
       "message": "success",
-      "data": []
+      "data": [],
     }
+    self.char_count = 0
 
 def get_ginger_url(text):
     API_KEY = "6ae0c3a0-afdc-4532-a810-82ded0054236"
@@ -51,10 +52,11 @@ def get_ginger_result(text):
     return result, False
 
 
-def convert_to_new_json_format(data, original_text, json_data):
+def convert_to_new_json_format(data, original_text, json_data, char_count):
   responses = data["LightGingerTheTextResult"]
   if len(responses) == 0:
-      return None
+      char_count += (len(original_text))
+      return char_count
   fixed_text = original_text
   fix_val = 0
   for item in responses:
@@ -62,6 +64,8 @@ def convert_to_new_json_format(data, original_text, json_data):
           if item["ShouldReplace"] != "True":
               item_data = {}
               item_data["active"] = True
+              item_data["from"] = item["From"] + char_count
+              item_data["to"] = item["To"] + char_count
               item_data["word"] = original_text[item["From"]:(item["To"]+1)]
               item_data["substitute"] = item["Suggestions"][0]["Text"]
               if item["Mistakes"][0]["CanAddToDict"]:
@@ -87,12 +91,12 @@ def convert_to_new_json_format(data, original_text, json_data):
               fix_val += (item["To"]+1) - item["From"] - len(item_data["substitute"])
 
               json_data["data"].append(item_data)
+  char_count += (len(original_text))
   for row in json_data["data"]:
     if "active" in row:
       row["example"][0]["correct"].append(fixed_text)
       del row["active"]
-  return True
-
+  return char_count
 
 def validate_request(req_json):
     try:
@@ -113,17 +117,27 @@ def check_grammar():
                         status=200, mimetype='application/json')
     response_data = ResponseData()
     if len(original_text) > 600:
-      original_text = re.split(r' *[\.\?!][\'"\)\]]* *', original_text)
+      regex = r' *[\.\?!][\'"\)\]]* *'
+      exp = re.compile(regex)
+      search = exp.search(original_text)
+      original_text = re.split(regex, original_text)
+      count = 0
       for text in original_text:
-        results, error = get_ginger_result(text)
+        try:
+            full_text = text+search.group(count)
+        except IndexError:
+            full_text = text
+        print(full_text)
+        results, error = get_ginger_result(full_text)
         if error:
             return Response(json.dumps({"error": error}), status=200, mimetype='application/json')
-        convert_to_new_json_format(results, text, response_data.json_data)
+        response_data.char_count = convert_to_new_json_format(results, full_text, response_data.json_data, response_data.char_count)
+        count += 1
     else:
       results, error = get_ginger_result(original_text)
       if error:
         return Response(json.dumps({"error": error}), status=200, mimetype='application/json')
-      convert_to_new_json_format(results, original_text, response_data.json_data)
+      convert_to_new_json_format(results, original_text, response_data.json_data, response_data.char_count)
     res = json.dumps(response_data.json_data)
     res = Response(res, status=200, mimetype='application/json')
     return res
@@ -139,5 +153,3 @@ if __name__ == '__main__':
         host='0.0.0.0',
         port=3000,
     )
-
-
