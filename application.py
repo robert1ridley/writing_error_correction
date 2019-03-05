@@ -127,7 +127,6 @@ def check_grammar():
             full_text = text+search.group(count)
         except IndexError:
             full_text = text
-        print(full_text)
         results, error = get_ginger_result(full_text)
         if error:
             return Response(json.dumps({"error": error}), status=200, mimetype='application/json')
