@@ -111,32 +111,60 @@ def validate_request(req_json):
 @app.route("/api/v1/textCheck", methods = ['POST'])
 def check_grammar():
     req_json = request.get_json()
+
+    # RETURN ERROR IF BAD VALIDATION
     validation_result, original_text = validate_request(req_json)
     if validation_result:
         return Response(validation_result,
                         status=200, mimetype='application/json')
+
+    # RESPONSE DATA CLASS
     response_data = ResponseData()
+
+    # IF INPUT TEXT LONGER THAT 600 CHAR
     if len(original_text) > 600:
       regex = r' *[\.\?!][\'"\)\]]* *'
       exp = re.compile(regex)
-      search = exp.search(original_text)
+      search = exp.findall(original_text)
       original_text = re.split(regex, original_text)
       count = 0
+      full_text = ""
+      combined_original_text = []
+
+      # COMBINE SENTENCES INTO ARRAY, SO THAT THEY ARE UP TO 600 CHARR
       for text in original_text:
         try:
-            full_text = text+search.group(count)
+            if len(full_text + text+search[count]) <= 600:
+                full_text += (text+search[count])
+            else:
+                combined_original_text.append(full_text)
+                full_text = text+search[count]
         except IndexError:
-            full_text = text
-        results, error = get_ginger_result(full_text)
-        if error:
-            return Response(json.dumps({"error": error}), status=200, mimetype='application/json')
-        response_data.char_count = convert_to_new_json_format(results, full_text, response_data.json_data, response_data.char_count)
+            if len(full_text + text) <= 600:
+                full_text += text
+            else:
+                combined_original_text.append(full_text)
+                full_text = text
         count += 1
+      if full_text != "":
+          combined_original_text.append(full_text)
+
+
+      # SEND EACH ITEM FROM ARRAY TO BE PROCESSED FOR GRAMMAR CHECKS
+      for i in combined_original_text:
+        results, error = get_ginger_result(i)
+        if error:
+          return Response(json.dumps({"error": error}), status=200, mimetype='application/json')
+        response_data.char_count = convert_to_new_json_format(results, i, response_data.json_data, response_data.char_count)
+
+    # IF ENTIRE TEXT IS SHORTER THAT 600 CHAR, SEND ENTIRE TEXT TO BE PROCESSED AS IS
     else:
       results, error = get_ginger_result(original_text)
       if error:
         return Response(json.dumps({"error": error}), status=200, mimetype='application/json')
       convert_to_new_json_format(results, original_text, response_data.json_data, response_data.char_count)
+
+    # SEND RES TO CLIENT
     res = json.dumps(response_data.json_data)
     res = Response(res, status=200, mimetype='application/json')
     return res
