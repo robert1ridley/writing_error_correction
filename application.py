@@ -130,23 +130,28 @@ def check_grammar():
       count = 0
       full_text = ""
       combined_original_text = []
+      added = False
 
       # COMBINE SENTENCES INTO ARRAY, SO THAT THEY ARE UP TO 600 CHARR
       for text in original_text:
         try:
             if len(full_text + text+search[count]) <= 600:
                 full_text += (text+search[count])
+                added = False
             else:
                 combined_original_text.append(full_text)
                 full_text = text+search[count]
+                added = True
         except IndexError:
             if len(full_text + text) <= 600:
                 full_text += text
+                added = False
             else:
                 combined_original_text.append(full_text)
                 full_text = text
+                added = True
         count += 1
-      if full_text != "":
+      if full_text != "" and added == False:
           combined_original_text.append(full_text)
 
 
@@ -163,6 +168,7 @@ def check_grammar():
       if error:
         return Response(json.dumps({"error": error}), status=200, mimetype='application/json')
       convert_to_new_json_format(results, original_text, response_data.json_data, response_data.char_count)
+
 
     # SEND RES TO CLIENT
     res = json.dumps(response_data.json_data)
