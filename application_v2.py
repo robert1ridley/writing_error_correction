@@ -19,7 +19,8 @@ def convert_to_new_json_format_v2(data, original_text, response_data, corrected_
     for error in data:
         item_data = {"word": original_text[error.offset:(error.offset + error.errorLength)],
                      "substitute": error.replacements[0], "description": error.message,
-                     "to": error.offset + error.errorLength, "explanation": error.message, "existence": True}
+                     "from": error.offset, "to": error.offset + error.errorLength, "explanation": error.message,
+                     "existence": True}
         if error.ruleIssueType == 'misspelling' or error.ruleIssueType == 'typographical':
             item_data['type'] = 'spelling'
         else:
