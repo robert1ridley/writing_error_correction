@@ -50,35 +50,52 @@
 请求：
 ```
 {
-	"text": "She likes he."
+	"text": "They doesn't like chiken."
 }
 ```
 
 返回：
 ```
 {
+    "errno": 0,
+    "message": "success",
     "data": [
         {
-            "word": "he",
-            "substitute": "him",
-            "from": 10,
-            "description": "objective male pronoun, used to refer to a male human or animal",
-            "type": "grammar",
-            "to": 11,
-            "explanation": "that male; objective male pronoun",
+            "word": "doesn't",
+            "substitute": "don't",
+            "description": "Possible verb agreement error — use the base form here.",
+            "to": 12,
+            "explanation": "Possible verb agreement error — use the base form here.",
             "existence": true,
+            "type": "grammar",
             "example": [
                 {
                     "correct": [
-                        "She likes him."
+                        "They don't like chiken."
                     ],
-                    "incorrect": "She likes he."
+                    "incorrect": "They doesn't like chiken."
+                }
+            ]
+        },
+        {
+            "word": "chiken",
+            "substitute": "chicken",
+            "description": "Possible spelling mistake found.",
+            "to": 24,
+            "explanation": "Possible spelling mistake found.",
+            "existence": true,
+            "type": "spelling",
+            "example": [
+                {
+                    "correct": [
+                        "They doesn't like chicken.",
+                        "They doesn't like chi ken."
+                    ],
+                    "incorrect": "They doesn't like chiken."
                 }
             ]
         }
-    ],
-    "errno": 0,
-    "message": "success"
+    ]
 }
 ```
 
