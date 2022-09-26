@@ -2,7 +2,7 @@ import json
 from flask import Flask, request, Response
 import language_tool_python
 
-application = app = Flask(__name__)
+app = Flask(__name__)
 my_tool = language_tool_python.LanguageTool('en-US')
 
 
@@ -74,6 +74,13 @@ def check_grammar():
     return res
 
 
+@app.route("/api/v1/debug", methods=['GET'])
+def debug_msg():
+    msg = json.dumps({"Welcome": "Debug page"})
+    res = Response(msg, status=200, mimetype='application/json')
+    return res
+
+
 @app.errorhandler(404)
 def not_found(error):
     return Response(json.dumps({'error': 'Not found'}), status=404, mimetype='application/json')
@@ -81,6 +88,5 @@ def not_found(error):
 
 if __name__ == '__main__':
     app.run(
-        host='0.0.0.0',
-        port=3000,
+        host='0.0.0.0'
     )

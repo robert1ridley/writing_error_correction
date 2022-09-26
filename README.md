@@ -12,12 +12,17 @@
 * 下载dependencies：`pip install -r requirements.txt`
 
 #### 运行说明
-* `export FLASK_APP=application.py`
+* `export FLASK_APP=application_v2.py`
 * `flask run`
-* 目前 端口设置 为3000
+* 目前 端口设置 为5000
 
 #### DEVELOPMENT URL
 * http://127.0.0.1:5000/api/v1/textCheck
+
+### PRODUCTION
+* Use Gunicorn as WSGI server in combination with pm2.
+* To run gunicorn, `gunicorn --bind 0.0.0.0:5000 application_v2:app`
+* To run gunicorn persistently with pm2, `pm2 --name=application_v2 start "gunicorn --bind 0.0.0.0:5000 application_v2:app"`
 
 #### HTTP请求方式
 * POST
