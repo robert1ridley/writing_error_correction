@@ -3,13 +3,13 @@
 ### 文档说明
 
 #### 运行环境
-* python 3.5.1
+* Python 3.9.13
 
 #### 设置环境
 * 输入 `cd writing_error_correction`
 * 生成一个虚拟环境: `python3 -m venv venv`
 * 启动虚拟环境：`source venv/bin/activate`
-* 下载dependencies：`pip install -r requirements.txt`
+* 下载dependencies：`pip install -r requirements_v2.txt`
 
 #### 运行说明
 * `export FLASK_APP=application_v2.py`
