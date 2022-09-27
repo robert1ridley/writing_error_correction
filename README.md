@@ -11,6 +11,9 @@
 * 启动虚拟环境：`source venv/bin/activate`
 * 下载dependencies：`pip install -r requirements_v2.txt`
 
+#### 额外的依赖性
+* Java >= 8
+
 #### 运行说明
 * `export FLASK_APP=application_v2.py`
 * `flask run`
